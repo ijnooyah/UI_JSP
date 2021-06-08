@@ -1,17 +1,42 @@
-<%@page import="com.yj.db.StudentVo"%>
 <%@page import="java.util.List"%>
+<%@page import="com.yj.db.StudentVo"%>
 <%@page import="com.yj.db.StudentDao"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ include file="include/header.jsp" %>
-<%
+<%	
 	StudentDao dao = StudentDao.getInstance();
-	List<StudentVo> list = dao.selectAll();
+	List<StudentVo> list = null;
+	
+	request.setCharacterEncoding("utf-8");
+	String option = request.getParameter("option");
+	String search = request.getParameter("search");
+	
+	System.out.println("option :" + option + ", search :" + search);
+	// 맨첫화면 option: null, search: null
+	if(option != null) {
+		if(option.equals("sname")) {
+			list = dao.selectBySname(search);
+		} else if(option.equals("major")) {
+			list = dao.selectByMajor(search);
+	 	} else {
+	 		list = dao.selectAll();
+	 	}
+	}
 	
 %>
 <script>
 $(function() {
-	// 상세정보 페이지
+	<%if(option != null) {
+		if(option.equals("sname")) {       %>
+			$("#sname").attr("selected", true);
+	<%	} else if(option.equals("major")) {%>
+			$("#major").attr("selected", true);
+	<%	} else {                           %>
+			$("#all").attr("selected", true);
+	<%	}                                
+	  }                                    %>
+	// 테이블 row 선택하면 상세정보 페이지로 넘어가기
 	$(".content_row").click(function() {
 		var sno = $(this).find("td:first").text().trim();
 		console.log("sno", sno);
@@ -19,11 +44,33 @@ $(function() {
 		location.href = "student_content.jsp?sno=" + sno;
 	});
 	
+	// 폼전송
 	$("#btnSelect").click(function() {
-		$("option")
-		return false;
+		var option = $("#option").val();
+		$("#frmStudent").submit();		
 	});
 	
+	
+	//첫화면에서만 막기 
+	if($("option:selected").val() == "all") {
+		$("#search").attr("readonly", true)
+	}
+	//셀렉트박스에서 전체 선택하면 입력창 막기
+	$("#option").change(function() {
+		console.log("확인", $("#option").val());
+		if($("#option").val() == "all") {
+			$("#search").val("");
+			$("#search").attr("readonly", true)
+		} else {
+			$("#search").attr("readonly", false)
+		}
+		
+	});
+	
+	//마우스오버시 커서모양 바꾸기 (선택대상인줄알게하기위해)
+	$('.content_row').mouseenter(function() {
+		$(this).css("cursor", "pointer");
+	});
 })
 </script>
 <title>학생 정보 관리</title>
@@ -44,24 +91,14 @@ $(function() {
 				</p>
 			</div>
 			<div class="col-md-12">
-			<form class="form-inline">
-<!-- 				<div class="col-md-3 col-sm-3 col-xs-3"> -->
-<!-- 					<div class="container"> -->
-						<select class="form-control" name="option">
-						  <option value="all">전체</option>
-						  <option value="sname">이름</option>
-						  <option value="major">전공</option>
+			<form class="form-inline" id="frmStudent">
+						<select class="form-control" name="option" id="option">
+						  <option value="all" id="all" selected>전체</option>
+						  <option value="sname" id="sname">이름</option>
+						  <option value="major" id="major">전공</option>
 						</select>
-<!-- 					</div> -->
-<!-- 				</div> -->
-<!-- 				<div class="col-md-7 col-sm-7  col-xs-7"> -->
-<!-- 					<div class="form-outline"> -->
-					  <input type="text" id="typeText" class="form-control" />
-<!-- 					</div> -->
-<!-- 				</div> -->
-<!-- 				<div class="col-md-2 col-sm-2  col-xs-2"> -->
-					<button type="submit" class="btn btn-success" id="btnSelect">조회</button>
-<!-- 				</div> -->
+					  <input type="text" id="search" class="form-control" name="search"/>
+					<button type="button" class="btn btn-success" id="btnSelect">조회</button>
 			</form>	
 			</div>
 			<br>
@@ -89,6 +126,7 @@ $(function() {
 					</tr>
 				</thead>
 				<tbody>
+				<%if(list != null) {%>
 				<%for(StudentVo vo : list)  {%>
 					<tr class="content_row">
 						<td>
@@ -110,6 +148,7 @@ $(function() {
 							<%=vo.getScore()%>
 						</td>
 					</tr>
+				<%} %>
 				<%} %>
 				</tbody>
 			</table>
