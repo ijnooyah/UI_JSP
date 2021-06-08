@@ -27,7 +27,7 @@ $(function() {
 				</p>
 			</div>
 			<div class="row">
-				<div class="col-md-3">
+				<div class="col-md-3 col-sm-3 col-xs-3">
 					<div class="container">
 						<select class="form-control">
 						  <option>전체</option>
@@ -36,15 +36,16 @@ $(function() {
 						</select>
 					</div>
 				</div>
-				<div class="col-md-7">
+				<div class="col-md-7 col-sm-7  col-xs-7">
 					<div class="form-outline">
 					  <input type="text" id="typeText" class="form-control" />
 					</div>
 				</div>
-				<div class="col-md-2">
-					<button type="button" class="btn btn-success">조회하기</button>
+				<div class="col-md-2 col-sm-2  col-xs-2">
+					<button type="button" class="btn btn-success">조회</button>
 				</div>
 			</div>
+			<br>
 			<table class="table table-bordered">
 				<thead>
 					<tr>
