@@ -20,7 +20,8 @@ $(function() {
 	});
 	
 	$("#btnSelect").click(function() {
-		
+		$("option")
+		return false;
 	});
 	
 })
