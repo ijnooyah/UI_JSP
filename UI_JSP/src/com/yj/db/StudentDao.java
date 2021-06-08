@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLDataException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,6 +42,11 @@ public class StudentDao {
 		if (conn!=null) try { conn.close(); } catch (Exception e) {e.printStackTrace(); }
 	}
 	
+//	public static final int INSERT_SUCCESS = 0;
+//	public static final int INSERT_FAIL = 1;
+//	public static final int INSERT_DIGIT = 2;
+//	public static final int INSERT_RANGE = 3;
+	
 	public boolean insertStudent(StudentVo vo) {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
@@ -57,13 +64,25 @@ public class StudentDao {
 			
 			int count = pstmt.executeUpdate();
 			if (count > 0) {
+//				return INSERT_SUCCESS;
 				return true;
 			}
-		} catch (Exception e){
-			
-		} finally {
+		} catch (SQLDataException e1){
+			// 자릿수 오류
+//			e1.printStackTrace();
+//			return INSERT_DIGIT;
+		} catch (SQLIntegrityConstraintViolationException e2) {
+			//score 1~100
+//			e2.printStackTrace();
+//			return INSERT_RANGE;
+		} catch (Exception e3) {
+			e3.printStackTrace();
+		}
+		
+		finally {
 			closeAll(null, pstmt, conn);
 		}
+//		return INSERT_FAIL;
 		return false;
 	}
 	
