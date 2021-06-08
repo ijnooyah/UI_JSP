@@ -1,12 +1,28 @@
+<%@page import="com.yj.db.StudentVo"%>
+<%@page import="java.util.List"%>
+<%@page import="com.yj.db.StudentDao"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ include file="include/header.jsp" %>
+<%
+	StudentDao dao = StudentDao.getInstance();
+	List<StudentVo> list = dao.selectAll();
+	
+%>
 <script>
 $(function() {
-	$("tr").click(function() {
-		var el = $(this);
-		console.log(el);
+	// 상세정보 페이지
+	$(".content_row").click(function() {
+		var sno = $(this).find("td:first").text().trim();
+		console.log("sno", sno);
+// 		$(location).attr("href","student_content.jsp");
+		location.href = "student_content.jsp?sno=" + sno;
 	});
+	
+	$("#btnSelect").click(function() {
+		
+	});
+	
 })
 </script>
 <title>학생 정보 관리</title>
@@ -23,27 +39,29 @@ $(function() {
 					학생 정보를 등록하려면 아래 버튼을 눌러주세요.
 				</p>
 				<p>
-					<a class="btn btn-primary btn-large" href="#">등록하기</a>
+					<a class="btn btn-primary btn-large" href="student_register_form.jsp">등록하기</a>
 				</p>
 			</div>
-			<div class="row">
-				<div class="col-md-3 col-sm-3 col-xs-3">
-					<div class="container">
-						<select class="form-control">
-						  <option>전체</option>
-						  <option>이름</option>
-						  <option>전공</option>
+			<div class="col-md-12">
+			<form class="form-inline">
+<!-- 				<div class="col-md-3 col-sm-3 col-xs-3"> -->
+<!-- 					<div class="container"> -->
+						<select class="form-control" name="option">
+						  <option value="all">전체</option>
+						  <option value="sname">이름</option>
+						  <option value="major">전공</option>
 						</select>
-					</div>
-				</div>
-				<div class="col-md-7 col-sm-7  col-xs-7">
-					<div class="form-outline">
+<!-- 					</div> -->
+<!-- 				</div> -->
+<!-- 				<div class="col-md-7 col-sm-7  col-xs-7"> -->
+<!-- 					<div class="form-outline"> -->
 					  <input type="text" id="typeText" class="form-control" />
-					</div>
-				</div>
-				<div class="col-md-2 col-sm-2  col-xs-2">
-					<button type="button" class="btn btn-success">조회</button>
-				</div>
+<!-- 					</div> -->
+<!-- 				</div> -->
+<!-- 				<div class="col-md-2 col-sm-2  col-xs-2"> -->
+					<button type="submit" class="btn btn-success" id="btnSelect">조회</button>
+<!-- 				</div> -->
+			</form>	
 			</div>
 			<br>
 			<table class="table table-bordered">
@@ -70,26 +88,28 @@ $(function() {
 					</tr>
 				</thead>
 				<tbody>
-					<tr>
+				<%for(StudentVo vo : list)  {%>
+					<tr class="content_row">
 						<td>
-							1001
+							<%=vo.getSno()%>
 						</td>
 						<td>
-							하윤지
+							<%=vo.getSname()%>
 						</td>
 						<td>
-							1
+							<%=vo.getSyear()%>
 						</td>
 						<td>
-							여
+							<%=vo.getGender()%>
 						</td>
 						<td>
-							컴공
+							<%=vo.getMajor()%>
 						</td>
 						<td>
-							100
+							<%=vo.getScore()%>
 						</td>
 					</tr>
+				<%} %>
 				</tbody>
 			</table>
 		</div>
