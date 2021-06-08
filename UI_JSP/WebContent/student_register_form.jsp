@@ -1,6 +1,29 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ include file="include/header.jsp"%>
+<script>
+$(function() {
+	$("#btnCheckSno").click(function() {
+		console.log("클릭됨");
+		var that = $(this);
+		var sno = $("#sno").val();
+		var url = "/UI_JSP/checkSno";
+		var sendData = {
+				"sno" : sno
+		};
+		$.get(url, sendData, function(receivedData) {
+			console.log("rData", receivedData);
+			var message = "등록된 학번입니다."
+			// 받아온 값이 true라면 중복되지 않은 학번임
+			if (receivedData == "true") {
+				message = "등록 가능한 학번입니다.";
+				// 여기선 this를 쓰면 안됨 그러면 get의 this가 됨
+			} 
+			that.next().next().text(message);
+		});
+	});
+})
+</script>
 <title>학생 등록</title>
 </head>
 <body>
@@ -13,7 +36,10 @@
 				</div>
 				<form role="form" action="student_register_run.jsp" method="post">
 					<div class="form-group">
-						<label for="sno"> 학번 </label> <input type="number"
+						<label for="sno"> 학번 </label>
+						<button type="button" class="btn btn-info" id="btnCheckSno">학번체크</button>
+						<br><span></span>
+					    <input type="number"
 							class="form-control" id="sno" name="sno" />
 					</div>
 					<div class="form-group">

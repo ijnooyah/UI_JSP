@@ -244,5 +244,28 @@ public class StudentDao {
 		}
 		return null;
 	}
+	
+	public int checkSno(String sno) {
+		ResultSet rs = null;
+		PreparedStatement pstmt = null;
+		Connection conn = null;
+		
+		try {
+			conn = getConnection();
+			String sql = "select count(*) from tbl_student"
+					+ "   where sno = '" + sno + "'"; 
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				int count = rs.getInt(1);
+				return count;
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			closeAll(rs, pstmt, conn);
+		}
+		return -1;
+	}
 
 }
