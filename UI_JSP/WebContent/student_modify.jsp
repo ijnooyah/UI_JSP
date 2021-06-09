@@ -93,7 +93,8 @@ $(function() {
 			$("#score").focus();
 			return false;
 		}
-		if (score < 0 && score > 100) {
+		var iScore = parseInt(score);
+		if (iScore < 0 || iScore > 100) {
 			$("#spanScore").text("0~100사이의 숫자를 입력해주세요.");
 			$("#score").focus();
 			return false;
@@ -113,8 +114,8 @@ $(function() {
 		<div class="row">
 			<div class="col-md-12">
 				<div class="jumbotron">
-					<h2>학생 상세 정보</h2>
-					<p>수정하려면 수정버튼을 삭제하려면 삭제버튼을 눌러주세요.</p>
+					<h2>수정하기</h2>
+					<p>수정하려는 정보를 제대로 기입해주세요.</p>
 				</div>
 				<form role="form" id="frmStudent" action="student_modify_run.jsp" method="post">
 					<div class="form-group">

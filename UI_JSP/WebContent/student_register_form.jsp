@@ -46,7 +46,7 @@ $(function() {
 		var syear = $("#syear").val().trim();
 		var major = $("#major").val().trim();
 		var score = $("#score").val().trim();
-		
+
 		//학번 처리 (학번은 1이상의 숫자만 가능하게 하기)
 		if (sno == "" ) {
 			$("#spanSno").text("학번을 입력해주세요.");
@@ -112,7 +112,8 @@ $(function() {
 			$("#score").focus();
 			return false;
 		}
-		if (score < 0 && score > 100) {
+		var iScore = parseInt(score);
+		if (iScore < 0 || iScore > 100) {
 			$("#spanScore").text("0~100사이의 숫자를 입력해주세요.");
 			$("#score").focus();
 			return false;
@@ -153,7 +154,7 @@ $(function() {
 			$("#sno").focus();
 			if (receivedData == "true") {
 				message = "등록 가능한 학번입니다.";
-				$("#sname").focus();
+				$("#sno").blur();
 			} 
 			that.next().text(message);
 		});
