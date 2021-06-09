@@ -14,6 +14,7 @@
 	
 	System.out.println("option :" + option + ", search :" + search);
 	// 맨첫화면 option: null, search: null
+	String message = "";
 	if(option != null) {
 		if(option.equals("sname")) {
 			list = dao.selectBySname(search);
@@ -22,13 +23,26 @@
 	 	} else {
 	 		list = dao.selectAll();
 	 	}
+		if (list.size() == 0) {
+			 message = "해당하는 학생이 없습니다";
+		} 
+	} else {
+		message = "조회 방법선택하고 조회를 누르세요";
 	}
 	
 %>
 <script>
 $(function() {
-	<%if(option != null) {
-		if(option.equals("sname")) {       %>
+	// 테이블만 보여주게하기
+	<%if(list != null) {%>
+	<% if (list.size() != 0) { %>
+		$("#message").css("display", "none");
+	<%}%>
+	<%}%>
+	//새로고침후 다시 돌아올때 전에 선택되었던거랑 검색어 유지하게하기
+	<%if(option != null) {  %>
+			$("#search").val("<%=search%>");
+	<%	if(option.equals("sname")) {       %>
 			$("#sname").attr("selected", true);
 	<%	} else if(option.equals("major")) {%>
 			$("#major").attr("selected", true);
@@ -101,7 +115,7 @@ $(function() {
 					<button type="button" class="btn btn-success" id="btnSelect">조회</button>
 			</form>	
 			</div>
-			<br>
+			<br>			
 			<table class="table table-bordered">
 				<thead>
 					<tr>
@@ -152,6 +166,17 @@ $(function() {
 				<%} %>
 				</tbody>
 			</table>
+			<div class="row" id="message">
+				<div class="col-md-12">
+					<div class="jumbotron">
+						<h2>
+							<%=message %>
+						</h2>
+					</div>
+				</div>
+	
+			</div>							
+			
 		</div>
 	</div>
 </div>
