@@ -2,8 +2,19 @@
 	pageEncoding="UTF-8"%>
 <%@ include file="include/header.jsp"%>
 <script>
-
+	function getTextByte(str) {
+		var len = 0;
+		for (var i = 0; i < str.length; i++) {
+			if (escape(str.charAt(i)).length == 6) { // 한글일때
+				len += 3;
+			} else {
+				len++;
+			}
+		}
+		return len;
+	}
 $(function() {
+	
 	var inputs = $(".input");
 	inputs.each(function() {
 		$(this).keydown(function(i) {
@@ -42,10 +53,14 @@ $(function() {
 			$("#sno").focus();
 			return false;
 		}
-		
 		var iSno = parseInt(sno);
 		if(iSno<1) {
 			$("#spanSno").text("1이상의 숫자를 입력해주세요.");
+			$("#sno").focus();
+			return false;
+		}
+		if(getTextByte(sno) > 8) {
+			$("#spanSno").text("학번은 8자리까지만 가능합니다.");
 			$("#sno").focus();
 			return false;
 		}
@@ -61,6 +76,12 @@ $(function() {
 			$("#sname").focus();
 			return false;
 		}
+		if(getTextByte(sname) > 10) {
+			$("#spanSname").text("최소글자수를 넘으셨습니다.");
+			$("#sname").focus();
+			return false;
+		}
+		
 		// 학년 처리 (셀렉트 박스로 완료)
 		//성별 처리
 		if ( $('input[name="gender"]:checked').length == 0 ) {
@@ -72,6 +93,11 @@ $(function() {
 		//전공 처리
 		if (major == "") {
 			$("#spanMajor").text("전공을 입력해주세요.");
+			$("#major").focus();
+			return false;
+		}
+		if(getTextByte(major) > 10) {
+			$("#spanMajor").text("최소글자수를 넘으셨습니다.");
 			$("#major").focus();
 			return false;
 		}

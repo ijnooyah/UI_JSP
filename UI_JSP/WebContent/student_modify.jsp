@@ -10,6 +10,17 @@
 	StudentVo vo = dao.getOneStudent(sno);
 %>
 <script>
+	function getTextByte(str) {
+		var len = 0;
+		for (var i = 0; i < str.length; i++) {
+			if (escape(str.charAt(i)).length == 6) { // 한글일때
+				len += 3;
+			} else {
+				len++;
+			}
+		}
+		return len;
+	}
 $(function() {
 	//학년정보 가져오기
 	<%if (vo.getSyear() == 1) {       %>
@@ -28,6 +39,71 @@ $(function() {
 	<%} else {%>
 		$("#rdoFemale").attr("checked", true)
 	<%}%>
+	
+	$("#frmStudent").submit(function() {
+		var sname = $("#sname").val().trim();
+		var syear = $("#syear").val().trim();
+		var major = $("#major").val().trim();
+		var score = $("#score").val().trim();
+		
+		//이름 처리
+		if (sname == "") {
+			$("#spanSname").text("이름을 입력해주세요.");
+			$("#sname").focus();
+			return false;
+		}
+		if (!isNaN(sname)) {
+			$("#spanSname").text("이름에 숫자 입력할 수 없습니다.");
+			$("#sname").focus();
+			return false;
+		}
+		if(getTextByte(sname) > 10) {
+			$("#spanSname").text("최소글자수를 넘으셨습니다.");
+			$("#sname").focus();
+			return false;
+		}
+		
+		// 학년 처리 (셀렉트 박스로 완료)
+		//성별 처리
+		if ( $('input[name="gender"]:checked').length == 0 ) {
+	   		$("#spanGender").text("성별을 선택해주세요.");
+	    	$('input[name="gender"]').focus();
+	   	    return false;
+		}
+		
+		//전공 처리
+		if (major == "") {
+			$("#spanMajor").text("전공을 입력해주세요.");
+			$("#major").focus();
+			return false;
+		}
+		if(getTextByte(major) > 10) {
+			$("#spanMajor").text("최소글자수를 넘으셨습니다.");
+			$("#major").focus();
+			return false;
+		}
+		if (!isNaN(major)) {
+			$("#spanMajor").text("전공에 숫자 입력할 수 없습니다.");
+			$("#major").focus();
+			return false;
+		}
+		
+		if (score == "") {
+			$("#spanScore").text("점수를 입력해주세요.");
+			$("#score").focus();
+			return false;
+		}
+		if (score < 0 && score > 100) {
+			$("#spanScore").text("0~100사이의 숫자를 입력해주세요.");
+			$("#score").focus();
+			return false;
+		}
+		
+		
+		// 제약조건해당하는거 없으면폼전송
+		$(this).submit();
+	});
+	
 })
 </script>
 <title>학생 정보 수정하기</title>
