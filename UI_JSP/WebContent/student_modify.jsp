@@ -116,7 +116,7 @@ $(function() {
 					<h2>학생 상세 정보</h2>
 					<p>수정하려면 수정버튼을 삭제하려면 삭제버튼을 눌러주세요.</p>
 				</div>
-				<form role="form" id="frmStudent" action="student_register_run.jsp" method="post">
+				<form role="form" id="frmStudent" action="student_modify_run.jsp" method="post">
 					<div class="form-group">
 						<label for="sno"> 학번 </label>
 						<br><span id="spanSno" style="color:red;"></span>
@@ -166,7 +166,7 @@ $(function() {
 						 <input type="number"
 							class="form-control input" id="score" name="score" value="<%= vo.getScore()%>" />
 					</div>
-					<button type="submit" class="btn btn-primary" id="btnInsert">등록하기</button>
+					<button type="submit" class="btn btn-primary" id="btnInsert">수정완료</button>
 				</form>
 			</div>
 		</div>
