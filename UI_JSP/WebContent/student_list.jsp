@@ -12,7 +12,6 @@
 	String option = request.getParameter("option");
 	String search = request.getParameter("search");
 	
-	System.out.println("option :" + option + ", search :" + search);
 	// 맨첫화면 option: null, search: null
 	String message = "";
 	if(option != null) {
@@ -29,13 +28,21 @@
 	} else {
 		message = "조회 방법선택하고 조회를 누르세요";
 	}
+	if(search != null) {
+		if(search.trim().equals("")) {
+			if(list != null){
+				list.clear();	
+			}
+			message = "검색어를 입력해주세요";
+		} 
+	}
 	
 %>
 <script>
 $(function() {
 	// 테이블만 보여주게하기
 	<%if(list != null) {%>
-	<% if (list.size() != 0) { %>
+	<%if(list.size() != 0) {%>
 		$("#message").css("display", "none");
 	<%}%>
 	<%}%>
@@ -141,7 +148,7 @@ $(function() {
 				</thead>
 				<tbody>
 				<%if(list != null) {%>
-				<%for(StudentVo vo : list)  {%>
+				<%for(StudentVo vo : list) { %>
 					<tr class="content_row">
 						<td>
 							<%=vo.getSno()%>
