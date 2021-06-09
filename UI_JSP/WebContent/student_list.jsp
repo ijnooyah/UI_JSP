@@ -28,12 +28,15 @@
 	} else {
 		message = "조회 방법선택하고 조회를 누르세요";
 	}
+	
 	if(search != null) {
 		if(search.trim().equals("")) {
-			if(list != null){
-				list.clear();	
+			if(!option.equals("all")) {
+				if(list != null){
+					list.clear();	
+				}
+				message = "검색어를 입력해주세요";
 			}
-			message = "검색어를 입력해주세요";
 		} 
 	}
 	
